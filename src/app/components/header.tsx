@@ -4,7 +4,7 @@ export default function Header(){
         <header className="bg-white text-[#FF69B4] p-6 shadow-md">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-4xl font-bold font-pacifico">
-            Summer Vibes Store
+            Summer Shop
           </h1>
           <nav>
             <ul className="flex space-x-6">

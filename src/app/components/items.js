@@ -364,11 +364,6 @@ export const items = [
         name: "Small Red Channel",
         link: "http://sale.dhgate.com/6NbPsR91",
         },
-        // {
-        // id: 73,
-        // name: "Goyard Purse DNE",
-        // link: "http://sale.dhgate.com/a7oaeq13",
-        // },
         {
         id: 74,
         name: "Gucci Bag",
@@ -399,6 +394,5 @@ export const items = [
         name: "Small Chanel Wallets",
         link: "http://sale.dhgate.com/CT7vg487",
         },
-    // Add more items here as needed
   ];
   
