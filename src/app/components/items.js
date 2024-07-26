@@ -1,5 +1,10 @@
 export const items = [
     {
+        id: 34,
+        name: "LV Purses (Baguette)",
+        link: "http://sale.dhgate.com/h6YkeO32",
+        },
+        {
         id: 1,
         name: "Dior Tote and Saddle Bag",
         link: "http://sale.dhgate.com/EepCkk99",
@@ -164,11 +169,11 @@ export const items = [
         name: "YSL Black Bag",
         link: "http://sale.dhgate.com/JJbyZO84",
         },
-        {
-        id: 34,
-        name: "LV Purses (Baguette)",
-        link: "http://sale.dhgate.com/h6YkeO32",
-        },
+        // {
+        // id: 34,
+        // name: "LV Purses (Baguette)",
+        // link: "http://sale.dhgate.com/h6YkeO32",
+        // },
         {
         id: 35,
         name: "Gucci Loafers",
