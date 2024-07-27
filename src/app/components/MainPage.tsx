@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
 import Header from "./header";
 import Footer from "./footer";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 // Define the type for the items
 type Item = {
@@ -13,6 +14,7 @@ type Item = {
 
 function MainComponent() {
   const [items, setItems] = useState<Item[]>([]);
+  const [isLoading, setIsLoading] = useState(true); // Add loading state
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
@@ -30,6 +32,7 @@ function MainComponent() {
         console.log("Fetched items:", response.data);
         setItems(response.data as Item[]);
       }
+      setIsLoading(false); // Set loading to false after data is fetched
     };
 
     fetchItems();
@@ -44,6 +47,10 @@ function MainComponent() {
     console.log(`Image URL for item ${id}:`, url);
     return url;
   };
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
 
   return (
     <div className="bg-[#FFC0CB] min-h-screen">
