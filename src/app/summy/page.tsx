@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { supabase } from '../../lib/supabaseClient';
+import EditPage from "../components/editPage";
 
 function UploadEditPage() {
   const [newImage, setNewImage] = useState<File | null>(null);
@@ -121,6 +122,7 @@ function UploadEditPage() {
           )}
         </div>
       </div>
+      <EditPage/>
     </div>
   );
 }
