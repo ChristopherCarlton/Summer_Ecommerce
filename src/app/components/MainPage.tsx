@@ -56,7 +56,7 @@ function MainComponent() {
           className="w-full h-[400px] object-cover"
         />
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center">
+          {/* <div className="text-center">
             <h2 className="text-white text-4xl font-bold mb-4">
               Summer Giveaway!
             </h2>
@@ -76,7 +76,7 @@ function MainComponent() {
                 </ul>
               </div>
             )}
-          </div>
+          </div> */}
         </div>
       </section>
 
