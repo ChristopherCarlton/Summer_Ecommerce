@@ -30,9 +30,29 @@ function MainComponent() {
         console.error("Error fetching items:", response.error);
       } else {
         console.log("Fetched items:", response.data);
-        setItems(response.data as Item[]);
+        const items = response.data as Item[];
+        setItems(items);
+
+        // Preload images
+        const imagePromises = items.map((item) =>
+          new Promise<void>((resolve, reject) => {
+            const img = new Image();
+            img.src = getImageUrl(item.id);
+            img.onload = () => resolve();
+            img.onerror = () => reject();
+          })
+        );
+
+        Promise.all(imagePromises)
+          .then(() => {
+            console.log("All images preloaded");
+            setIsLoading(false);
+          })
+          .catch((error) => {
+            console.error("Error preloading images:", error);
+            setIsLoading(false);
+          });
       }
-      setIsLoading(false); // Set loading to false after data is fetched
     };
 
     fetchItems();
