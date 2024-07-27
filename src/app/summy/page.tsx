@@ -6,6 +6,7 @@ function UploadEditPage() {
   const [newImage, setNewImage] = useState<File | null>(null);
   const [newDescription, setNewDescription] = useState("");
   const [newLink, setNewLink] = useState("");
+  const [message, setMessage] = useState<{ text: string; color: string } | null>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -34,13 +35,14 @@ function UploadEditPage() {
       // Upload image to Supabase Storage
       const { data: storageData, error: storageError } = await supabase.storage
         .from('product-images')
-        .upload(`summer-item-${id}.png`, newImage, { //adddddded here
+        .upload(`summer-item-${id}.png`, newImage, {
           cacheControl: '3600',
           upsert: false,
         });
 
       if (storageError) {
         console.error('Failed to upload image:', storageError);
+        setMessage({ text: 'Upload failed', color: 'red' });
         return;
       }
 
@@ -66,12 +68,17 @@ function UploadEditPage() {
 
       if (error) {
         console.error('Failed to add item:', error);
+        setMessage({ text: 'Upload failed', color: 'red' });
       } else {
         console.log('Item added successfully:', data);
+        setMessage({ text: 'Upload success', color: 'green' });
         setNewImage(null);
         setNewDescription("");
         setNewLink("");
+        (document.getElementById("imageInput") as HTMLInputElement).value = "";
       }
+    } else {
+      setMessage({ text: 'Please provide an image and description', color: 'red' });
     }
   };
 
@@ -86,7 +93,7 @@ function UploadEditPage() {
       <div className="container mx-auto mb-8">
         <h2 className="text-2xl font-bold text-[#FF69B4] mb-4">Add New Item</h2>
         <div className="bg-white p-6 rounded-lg shadow-lg">
-          <input type="file" onChange={handleImageChange} className="mb-4 w-full text-black" />
+          <input type="file" id="imageInput" onChange={handleImageChange} className="mb-4 w-full text-black" />
           <input
             type="text"
             value={newDescription}
@@ -107,6 +114,11 @@ function UploadEditPage() {
           >
             Add Item
           </button>
+          {message && (
+            <div className={`mt-4 p-4 rounded-lg text-white`} style={{ backgroundColor: message.color }}>
+              {message.text}
+            </div>
+          )}
         </div>
       </div>
     </div>
