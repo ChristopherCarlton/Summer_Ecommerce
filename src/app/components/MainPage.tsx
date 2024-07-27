@@ -56,27 +56,6 @@ function MainComponent() {
           className="w-full h-[400px] object-cover"
         />
         <div className="absolute inset-0 flex items-center justify-center">
-          {/* <div className="text-center">
-            <h2 className="text-white text-4xl font-bold mb-4">
-              Summer Giveaway!
-            </h2>
-            <button
-              onClick={toggleDropdown}
-              className="bg-white text-[#FF69B4] px-6 py-3 rounded-full font-semibold hover:bg-[#FFC0CB] transition duration-300"
-            >
-              Click here for details
-            </button>
-            {isDropdownOpen && (
-              <div className="mt-4 bg-white text-[#FF69B4] p-4 rounded-lg">
-                <p>To enter the giveaway:</p>
-                <ul className="list-disc list-inside mt-2">
-                  <li>Follow us on Instagram</li>
-                  <li>Comment on our latest post</li>
-                  <li>Tag 3 friends</li>
-                </ul>
-              </div>
-            )}
-          </div> */}
         </div>
       </section>
 
