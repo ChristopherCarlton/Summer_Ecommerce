@@ -1,4 +1,4 @@
-import MainComponent from "./components/summer";
+import MainComponent from "./components/MainPage";
 
 export default function Home() {
   return (

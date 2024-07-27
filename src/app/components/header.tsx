@@ -1,48 +1,25 @@
+import { FaTiktok, FaInstagram, FaFacebook, FaYoutube } from "react-icons/fa";
 
-export default function Header(){
-    return(
-        <header className="bg-white text-[#FF69B4] p-6 shadow-md">
-        <div className="container mx-auto flex justify-between items-center">
-          <h1 className="text-4xl font-bold font-pacifico">
-            Summer Shop
-          </h1>
-          <nav>
-            <ul className="flex space-x-6">
-              <li>
-                <a
-                  href="#"
-                  className="hover:text-[#FFC0CB] text-lg font-semibold"
-                >
-                  Home
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="hover:text-[#FFC0CB] text-lg font-semibold"
-                >
-                  Shop
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="hover:text-[#FFC0CB] text-lg font-semibold"
-                >
-                  About
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="hover:text-[#FFC0CB] text-lg font-semibold"
-                >
-                  Contact
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </div>
-      </header>
-    )
+export default function Header() {
+  return (
+    <header className="bg-white text-[#FF69B4] p-6 shadow-md">
+      <div className="container mx-auto flex justify-between items-center">
+        <h1 className="text-4xl font-bold font-pacifico">Summer Shop</h1>
+        <nav>
+          <ul className="flex space-x-6">
+            <li>
+              <a href="https://www.tiktok.com/@summerrvu" target="_blank" rel="noopener noreferrer" className="text-[#FF69B4] hover:text-[#ADD8E6] text-lg font-semibold">
+                <FaTiktok size={24} />
+              </a>
+            </li>
+            <li>
+              <a href="https://www.instagram.com/summer.vu/?hl=en" target="_blank" rel="noopener noreferrer" className="text-[#FF69B4] hover:text-[#ADD8E6] text-lg font-semibold">
+                <FaInstagram size={24} />
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+  );
 }
