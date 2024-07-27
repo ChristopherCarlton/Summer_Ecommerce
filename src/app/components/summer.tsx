@@ -1,19 +1,53 @@
 "use client";
-import React from "react";
-import { items } from "./items";
+import React, { useEffect, useState } from "react";
+import { supabase } from "../../lib/supabaseClient";
 import Header from "./header";
 import Footer from "./footer";
 
+// Define the type for the items
+type Item = {
+  id: number;
+  name: string;
+  link: string;
+};
+
 function MainComponent() {
-  const [isDropdownOpen, setIsDropdownOpen] = React.useState(false);
+  const [items, setItems] = useState<Item[]>([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  useEffect(() => {
+    const fetchItems = async () => {
+      console.log("Fetching items from Supabase...");
+      const response = await supabase
+        .from("summerItems")
+        .select("*");
+
+      console.log("Supabase response:", response);
+
+      if (response.error) {
+        console.error("Error fetching items:", response.error);
+      } else {
+        console.log("Fetched items:", response.data);
+        setItems(response.data as Item[]);
+      }
+    };
+
+    fetchItems();
+  }, []);
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  const getImageUrl = (id: number) => {
+    const url = `https://psxmuvbtzgqsynfweilj.supabase.co/storage/v1/object/public/product-images/summer-item-${id}.png`;
+    console.log(`Image URL for item ${id}:`, url);
+    return url;
+  };
+
   return (
     <div className="bg-[#FFC0CB] min-h-screen">
-      <Header/>
+      <Header />
       
       <section className="relative">
         <img
@@ -48,14 +82,15 @@ function MainComponent() {
 
       <main className="container mx-auto p-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
+          {items.length === 0 && <p>No items found.</p>}
           {items.map((item) => (
             <div
               key={item.id}
               className="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105"
             >
-              <a href={`${item.link}`}>
+              <a href={item.link}>
                 <img
-                  src={`/images/summer-item-${item.id}.png`}
+                  src={getImageUrl(item.id)}
                   alt={`Summer item: ${item.name} - perfect for beach days`}
                   className="w-full h-64 object-cover"
                 />
@@ -69,7 +104,7 @@ function MainComponent() {
           ))}
         </div>
       </main>
-      <Footer/>
+      <Footer />
     </div>
   );
 }

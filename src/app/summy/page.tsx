@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import { supabase } from '../../lib/supabaseClient';
 
@@ -26,29 +26,42 @@ function UploadEditPage() {
       // Generate a unique id for the item
       const id = Date.now();
 
+      console.log('Uploading image to Supabase storage...');
+      console.log('Image file:', newImage);
+      console.log('Image file type:', newImage.type);
+      console.log('Image file size:', newImage.size);
+
       // Upload image to Supabase Storage
       const { data: storageData, error: storageError } = await supabase.storage
         .from('product-images')
-        .upload(`public/summer-item-${id}`, newImage);
+        .upload(`summer-item-${id}.png`, newImage, { //adddddded here
+          cacheControl: '3600',
+          upsert: false,
+        });
 
       if (storageError) {
         console.error('Failed to upload image:', storageError);
         return;
       }
 
+      console.log('Image uploaded successfully:', storageData);
+
       // Get the public URL of the uploaded image
-      const { data: { publicUrl: imageUrl } } = supabase.storage
+      const { publicUrl: imageUrl } = supabase.storage
         .from('product-images')
-        .getPublicUrl(`public/summer-item-${id}`);
+        .getPublicUrl(`summer-item-${id}`).data;
+
+      console.log('Public URL of uploaded image:', imageUrl);
 
       // Insert the new item into the database
       const newItem = {
+        id: id,
         name: newDescription,
         link: newLink || imageUrl,
       };
 
       const { data, error } = await supabase
-        .from('items')
+        .from('summerItems')
         .insert([newItem]);
 
       if (error) {
