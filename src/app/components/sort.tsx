@@ -70,7 +70,7 @@ function Sort() {
 
       <main className="container mx-auto p-8">
         <div className="mb-4">
-          <label htmlFor="sortOrder" className="text-[#FF69B4] font-semibold">Sort by:</label>
+          <label htmlFor="sortOrder" className="text-[#FF69B4] font-semibold">Filter:</label>
           <select
             id="sortOrder"
             value={sortOrder}
