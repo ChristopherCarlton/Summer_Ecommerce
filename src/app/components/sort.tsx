@@ -48,9 +48,9 @@ function Sort() {
 
   const sortedItems = [...items].sort((a, b) => {
     if (sortOrder === "newest") {
-      return a.id - b.id;
-    } else {
       return b.id - a.id;
+    } else {
+      return a.id - b.id;
     }
   });
 
@@ -70,7 +70,7 @@ function Sort() {
 
       <main className="container mx-auto p-8">
         <div className="mb-4">
-          <label htmlFor="sortOrder" className="text-[#FF69B4] font-semibold">Filter:</label>
+          <label htmlFor="sortOrder" className="text-[#FF69B4] font-semibold">Sort:</label>
           <select
             id="sortOrder"
             value={sortOrder}
