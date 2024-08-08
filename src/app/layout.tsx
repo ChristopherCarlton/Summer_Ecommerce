@@ -18,6 +18,18 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="theme-color" content="#ADD8E6" />
+        {/* Google tag (gtag.js) */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-9L3NQJLWNF"></script>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-9L3NQJLWNF');
+            `,
+          }}
+        />
       </head>
       <body className={inter.className}>{children}</body>
     </html>
