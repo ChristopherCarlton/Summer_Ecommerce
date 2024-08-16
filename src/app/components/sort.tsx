@@ -4,6 +4,7 @@ import { supabase } from "../../lib/supabaseClient";
 import Header from "./header";
 import Footer from "./footer";
 
+// Define the type for the items
 type Item = {
   id: number;
   name: string;
@@ -18,27 +19,17 @@ function Sort() {
   useEffect(() => {
     const fetchItems = async () => {
       console.log("Fetching items from Supabase...");
+      const response = await supabase
+        .from("summerItems")
+        .select("*");
 
-      // Check if items are stored in local storage
-      const cachedItems = localStorage.getItem("summerItems");
-      if (cachedItems) {
-        console.log("Using cached items");
-        setItems(JSON.parse(cachedItems));
+      console.log("Supabase response:", response);
+
+      if (response.error) {
+        console.error("Error fetching items:", response.error);
       } else {
-        // If no cache, fetch from Supabase
-        const response = await supabase
-          .from("summerItems")
-          .select("*");
-
-        if (response.error) {
-          console.error("Error fetching items:", response.error);
-        } else {
-          console.log("Fetched items:", response.data);
-          setItems(response.data as Item[]);
-
-          // Store items in local storage for future use
-          localStorage.setItem("summerItems", JSON.stringify(response.data));
-        }
+        console.log("Fetched items:", response.data);
+        setItems(response.data as Item[]);
       }
     };
 
