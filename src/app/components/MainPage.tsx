@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { supabase } from "../../lib/supabaseClient";
 import Header from "./header";
 import Footer from "./footer";
-import Sort from "./sort";
 
 // Define the type for the items
 type Item = {
@@ -12,8 +11,9 @@ type Item = {
   link: string;
 };
 
-function MainComponent() {
+function Main() {
   const [items, setItems] = useState<Item[]>([]);
+  const [sortOrder, setSortOrder] = useState<string>("newest");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
@@ -46,23 +46,44 @@ function MainComponent() {
     return url;
   };
 
+  const sortedItems = [...items].sort((a, b) => {
+    if (sortOrder === "newest") {
+      return b.id - a.id;
+    } else {
+      return a.id - b.id;
+    }
+  });
+
   return (
     <div className="bg-[#FFC0CB] min-h-screen">
       <Header />
       
       <section className="relative">
         <img
-          src="/images/ANG2.png"
+          src="/images/ANG2.webp"
           alt="Summer Giveaway featuring beach accessories and tropical scenery"
           className="w-full h-[400px] object-cover"
         />
         <div className="absolute inset-0 flex items-center justify-center">
         </div>
       </section>
+
       <main className="container mx-auto p-8">
+        <div className="mb-4">
+          <label htmlFor="sortOrder" className="text-[#FF69B4] font-semibold">Sort:</label>
+          <select
+            id="sortOrder"
+            value={sortOrder}
+            onChange={(e) => setSortOrder(e.target.value)}
+            className="ml-2 p-2 border border-gray-300 rounded text-black"
+          >
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+          </select>
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {items.length === 0 && <p>No items found.</p>}
-          {items.map((item) => (
+          {sortedItems.length === 0 && <p>No items found.</p>}
+          {sortedItems.map((item) => (
             <div
               key={item.id}
               className="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105"
@@ -88,4 +109,4 @@ function MainComponent() {
   );
 }
 
-export default MainComponent;
+export default Main;
