@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { supabase } from '../../lib/supabaseClient';
-import EditPage from "../components/EditPage/editPage";
+import EditPage from "../components/editPage";
 
 function UploadEditPage() {
   const [newImage, setNewImage] = useState<File | null>(null);
@@ -12,91 +12,73 @@ function UploadEditPage() {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setNewImage(e.target.files[0]);
-      console.log('Image selected:', e.target.files[0].name, e.target.files[0].size, e.target.files[0].type);
     }
   };
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewDescription(e.target.value);
-    console.log('Description updated:', e.target.value);
   };
 
   const handleLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewLink(e.target.value);
-    console.log('Link updated:', e.target.value);
   };
 
   const handleSubmit = async () => {
     if (newImage && newDescription) {
       // Generate a unique id for the item
       const id = Date.now();
-      console.log('Starting the upload process...');
-      console.log('Generated ID:', id);
 
-      // Logging image details
-      console.log('Image details:', {
-        name: newImage.name,
-        type: newImage.type,
-        size: newImage.size,
-      });
+      console.log('Uploading image to Supabase storage...');
+      console.log('Image file:', newImage);
+      console.log('Image file type:', newImage.type);
+      console.log('Image file size:', newImage.size);
 
-      // Upload image to Cloudflare R2
-      try {
-        const formData = new FormData();
-        formData.append('file', newImage);
-        formData.append('key', `summer-item-${id}.png`);
-        console.log('FormData prepared:', formData);
-
-        const response = await fetch(`/api/cloudflare/upload-image`, {
-          method: 'POST',
-          body: formData,
+      // Upload image to Supabase Storage
+      const { data: storageData, error: storageError } = await supabase.storage
+        .from('product-images')
+        .upload(`summer-item-${id}.png`, newImage, {
+          cacheControl: '3600',
+          upsert: false,
         });
 
-        console.log('Upload response:', response);
-
-        if (!response.ok) {
-          console.error('Upload failed with status:', response.status);
-          throw new Error('Failed to upload image to Cloudflare R2');
-        }
-
-        const data = await response.json();
-        console.log('Upload successful, response data:', data);
-
-        const imageUrl = data.url;
-        console.log('Image URL:', imageUrl);
-
-        // Insert the new item into the database
-        const newItem = {
-          id: id,
-          name: newDescription,
-          link: newLink || imageUrl,
-        };
-
-        console.log('Inserting new item into the database:', newItem);
-
-        const { data: insertData, error } = await supabase
-          .from('summerItems')
-          .insert([newItem]);
-
-        if (error) {
-          console.error('Database insert error:', error);
-          setMessage({ text: 'Upload failed', color: 'red' });
-        } else {
-          console.log('Item added successfully to the database:', insertData);
-          setMessage({ text: 'Upload success', color: 'green' });
-
-          // Reset form
-          setNewImage(null);
-          setNewDescription("");
-          setNewLink("");
-          (document.getElementById("imageInput") as HTMLInputElement).value = "";
-        }
-      } catch (error) {
-        console.error('Error occurred during the upload process:', error);
+      if (storageError) {
+        console.error('Failed to upload image:', storageError);
         setMessage({ text: 'Upload failed', color: 'red' });
+        return;
+      }
+
+      console.log('Image uploaded successfully:', storageData);
+
+      // Get the public URL of the uploaded image
+      const { publicUrl: imageUrl } = supabase.storage
+        .from('product-images')
+        .getPublicUrl(`summer-item-${id}`).data;
+
+      console.log('Public URL of uploaded image:', imageUrl);
+
+      // Insert the new item into the database
+      const newItem = {
+        id: id,
+        name: newDescription,
+        link: newLink || imageUrl,
+      };
+
+      const { data, error } = await supabase
+        .from('summerItems')
+        .insert([newItem]);
+
+      if (error) {
+        console.error('Failed to add item:', error);
+        setMessage({ text: 'Upload failed', color: 'red' });
+      } else {
+        console.log('Item added successfully:', data);
+        setMessage({ text: 'Upload success', color: 'green' });
+        setNewImage(null);
+        setNewDescription("");
+        setNewLink("");
+        (document.getElementById("imageInput") as HTMLInputElement).value = "";
       }
     } else {
-      console.warn('Form submission attempted with missing image or description');
       setMessage({ text: 'Please provide an image and description', color: 'red' });
     }
   };
@@ -140,7 +122,7 @@ function UploadEditPage() {
           )}
         </div>
       </div>
-      <EditPage />
+      <EditPage/>
     </div>
   );
 }
