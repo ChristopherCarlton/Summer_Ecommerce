@@ -6,8 +6,8 @@ const path = require('path');
 require('dotenv').config();
 
 // Initialize Supabase client using environment variables
-// const supabaseUrl = ;
-// const supabaseKey = ;
+const supabaseUrl = 'https://psxmuvbtzgqsynfweilj.supabase.co';
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzeG11dmJ0emdxc3luZndlaWxqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MjIwMzI0MDYsImV4cCI6MjAzNzYwODQwNn0.UlRqsh9QzqGGDI3NJuJKiq0PBpRkq8i4qbJ4oRh71jE';
 
 if (!supabaseUrl || !supabaseKey) {
   throw new Error('Missing Supabase URL or anonymous key.');
@@ -28,7 +28,7 @@ async function downloadImages() {
   const { data, error } = await supabase
     .storage
     .from(bucketName)
-    .list('', { limit: 300 });
+    .list('', { limit: 400 });
 
   if (error) {
     console.error('Error listing files:', error);
