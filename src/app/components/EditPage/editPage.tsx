@@ -2,11 +2,11 @@
 import React, { useState, useEffect } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
-// Type for the items
 type Item = {
   id: number;
   name: string;
-  link: string;  // This will store the Cloudflare R2 URL
+  link: string;
+  category: string | null;  // Allow null for category
 };
 
 function EditPage() {
@@ -15,16 +15,18 @@ function EditPage() {
   const [editedImage, setEditedImage] = useState<File | null>(null);
   const [editedName, setEditedName] = useState("");
   const [editedLink, setEditedLink] = useState("");
+  const [editedCategory, setEditedCategory] = useState<string | null>(null);  // Allow null for category
   const [message, setMessage] = useState<{ text: string; color: string } | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchItems = async () => {
-      const { data, error } = await supabase.from('summerItems').select('*');
+      const { data, error } = await supabase.from('summerItems').select('id, name, link, category');
       if (error) {
         console.error('Error fetching items:', error);
       } else {
-        setItems(data as Item[]);
+        const sortedData = (data as Item[]).sort((a, b) => b.id - a.id);  // Sort by newest to oldest
+        setItems(sortedData);
       }
     };
     fetchItems();
@@ -34,6 +36,7 @@ function EditPage() {
     setEditMode(item.id);
     setEditedName(item.name);
     setEditedLink(item.link);
+    setEditedCategory(item.category);  // Set the category to edit
     setEditedImage(null);
   };
 
@@ -41,50 +44,14 @@ function EditPage() {
     setEditMode(null);
     setEditedName("");
     setEditedLink("");
+    setEditedCategory(null);
     setEditedImage(null);
-  };
-
-  const handleDelete = async (id: number) => {
-    console.log(`Attempting to delete item with id ${id} from database...`);
-    const { error: deleteError } = await supabase
-      .from('summerItems')
-      .delete()
-      .eq('id', id);
-
-    if (deleteError) {
-      console.error('Failed to delete item:', deleteError);
-      setMessage({ text: 'Failed to delete item', color: 'red' });
-    } else {
-      console.log(`Attempting to delete image summer-item-${id}.png from Cloudflare R2...`);
-      try {
-        const response = await fetch(`/api/cloudflare/delete-image`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ key: `summer-item-${id}.png` }),
-        });
-
-        if (!response.ok) {
-          throw new Error('Failed to delete image from Cloudflare R2');
-        }
-
-        console.log('Image deleted successfully.');
-        setItems(items.filter((item) => item.id !== id));
-        setMessage({ text: 'Item deleted successfully', color: 'green' });
-      } catch (error) {
-        console.error('Failed to delete image:', error);
-        setMessage({ text: 'Failed to delete image', color: 'red' });
-      }
-    }
-    setDeleteId(null);
   };
 
   const handleEditSubmit = async (id: number) => {
     let imageUrl = editedLink;
 
     if (editedImage) {
-      console.log('Attempting to upload new image to Cloudflare R2...');
       try {
         const formData = new FormData();
         formData.append('file', editedImage);
@@ -101,36 +68,28 @@ function EditPage() {
 
         const data = await response.json();
         imageUrl = data.url;
-
-        console.log('New image uploaded successfully:', imageUrl);
       } catch (error) {
-        console.error('Failed to upload image:', error);
         setMessage({ text: 'Failed to upload image', color: 'red' });
         return;
       }
     }
 
-    console.log('Updating item in the database...');
     const { data, error } = await supabase
       .from('summerItems')
-      .update({ name: editedName, link: imageUrl })
+      .update({ name: editedName, link: imageUrl, category: editedCategory })  // Update category, can be null
       .eq('id', id);
 
     if (error) {
-      console.error('Failed to update item:', error);
       setMessage({ text: 'Failed to update item', color: 'red' });
     } else {
-      console.log('Item updated successfully:', data);
-      setItems(items.map((item) => (item.id === id ? { ...item, name: editedName, link: imageUrl } : item)));
+      setItems(items.map((item) => (item.id === id ? { ...item, name: editedName, link: imageUrl, category: editedCategory } : item)));
       setMessage({ text: 'Item updated successfully', color: 'green' });
       handleCancelEdit();
     }
   };
 
   const getImageUrl = (id: number) => {
-    const url = `https://summersshop.com/summer-item-${id}.png`;
-    console.log(`Image URL for item ${id}:`, url);
-    return url;
+    return `https://summersshop.com/summer-item-${id}.png`;  // Same logic for image URLs
   };
 
   return (
@@ -144,12 +103,6 @@ function EditPage() {
       <div className="container mx-auto mb-8">
         {items.map((item) => (
           <div key={item.id} className="bg-white rounded-lg shadow-lg overflow-hidden mb-4 relative">
-            <button
-              onClick={() => setDeleteId(item.id)}
-              className="absolute top-2 right-2 bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center"
-            >
-              X
-            </button>
             {editMode === item.id ? (
               <div className="p-4">
                 <input
@@ -166,6 +119,18 @@ function EditPage() {
                   placeholder="Edit Link"
                   className="mb-4 w-full p-2 border border-gray-300 rounded text-black"
                 />
+                <select
+                  value={editedCategory || "null"}
+                  onChange={(e) => setEditedCategory(e.target.value === "null" ? null : e.target.value)}
+                  className="mb-4 w-full p-2 border border-gray-300 rounded text-black"
+                >
+                  <option value="null">No Category</option>  {/* Option for null category */}
+                  <option value="handbag">Handbag</option>
+                  <option value="wallet">Wallet</option>
+                  <option value="glasses">Glasses</option>
+                  <option value="duffle">Duffle</option>
+                  <option value="mens">Mens</option>
+                </select>
                 <input
                   type="file"
                   onChange={(e) => setEditedImage(e.target.files ? e.target.files[0] : null)}
@@ -188,12 +153,16 @@ function EditPage() {
               <div className="p-4 flex justify-between items-center">
                 <div>
                   <p className="text-[#FF69B4] font-semibold font-roboto text-xl">{item.name}</p>
+                  <p className="text-gray-500">{item.category || "No Category"}</p>
+                  <img
+                    src={getImageUrl(item.id)}
+                    alt={`Summer item: ${item.name}`}
+                    className="w-full h-64 object-cover mb-4"
+                  />  {/* Display item image */}
                   <a href={item.link}>
-                    <img
-                      src={getImageUrl(item.id)}
-                      alt={`Summer item: ${item.name} - perfect for beach days`}
-                      className="w-full h-64 object-cover"
-                    />
+                    <button className="bg-[#FF69B4] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#FFC0CB] transition duration-300 w-full">
+                      View Item
+                    </button>
                   </a>
                 </div>
                 <button
@@ -212,26 +181,6 @@ function EditPage() {
           </div>
         )}
       </div>
-
-      {deleteId !== null && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-8 rounded-lg shadow-lg text-center">
-            <p className="mb-4 text-black">Are you sure you want to delete this item?</p>
-            <button
-              onClick={() => handleDelete(deleteId)}
-              className="bg-red-600 text-white px-4 py-2 rounded-full font-semibold mr-2"
-            >
-              Yes
-            </button>
-            <button
-              onClick={() => setDeleteId(null)}
-              className="bg-gray-300 text-black px-4 py-2 rounded-full font-semibold"
-            >
-              No
-            </button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
