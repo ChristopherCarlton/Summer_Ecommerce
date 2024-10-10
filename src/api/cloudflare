@@ -1,0 +1,37 @@
+import { NextApiRequest, NextApiResponse } from 'next';
+import { S3Client, DeleteObjectCommand } from '@aws-sdk/client-s3';
+
+const s3 = new S3Client({
+  region: 'auto',
+  endpoint: process.env.CLOUDFLARE_ENDPOINT as string,
+  credentials: {
+    accessKeyId: process.env.CLOUDFLARE_ACCESS_KEY_ID as string,
+    secretAccessKey: process.env.CLOUDFLARE_SECRET_ACCESS_KEY as string,
+  },
+});
+
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ message: 'Method not allowed' });
+  }
+
+  const { key } = req.body;
+
+  if (!key) {
+    return res.status(400).json({ message: 'Key is required' });
+  }
+
+  try {
+    const command = new DeleteObjectCommand({
+      Bucket: process.env.CLOUDFLARE_BUCKET_NAME,
+      Key: key,
+    });
+
+    await s3.send(command);
+
+    res.status(200).json({ message: 'Image deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting image from Cloudflare R2:', error);
+    res.status(500).json({ message: 'Failed to delete image' });
+  }
+}
