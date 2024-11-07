@@ -39,97 +39,105 @@ export default function Header() {
   }, []);
 
   return (
-    <header className={`
-      sticky top-0 z-50
-      bg-white text-primary shadow-md
-      transition-all duration-300
-      ${isScrolled ? 'py-2' : 'py-4'}
-    `}>
-      {/* Main header content */}
-      <div className="container mx-auto px-4">
-        <div className="flex justify-between items-center">
-          <Link href="/" className={`text-4xl font-bold ${pacifico.className} transition-all duration-300 ${isScrolled ? 'scale-90' : ''}`}>
-            Summer Shop
-          </Link>
-          
-          <div className="flex items-center space-x-6">
-            {/* Social Icons */}
-            <div className="hidden md:flex space-x-6">
-              <a 
-                href="https://www.tiktok.com/@summerrvu" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-primary hover:text-secondary transition-colors duration-200"
-              >
-                <FaTiktok size={24} />
-              </a>
-              <a 
-                href="https://www.instagram.com/summer.vu/?hl=en" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-primary hover:text-secondary transition-colors duration-200"
-              >
-                <FaInstagram size={24} />
-              </a>
-            </div>
+    <>
+      <header className={`
+        sticky top-0 z-50
+        bg-white text-primary
+        transition-all duration-300
+        ${isScrolled ? 'py-2 shadow-md' : 'py-4'}
+      `}>
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-center">
+            <Link href="/" className={`text-4xl font-bold ${pacifico.className} transition-all duration-300 ${isScrolled ? 'scale-90' : ''}`}>
+              Summer Shop
+            </Link>
             
-            {/* Hamburger Menu Button */}
-            <button 
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-primary hover:text-secondary p-2 transition-colors duration-200"
-              aria-label="Toggle menu"
-            >
-              {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
-            </button>
+            <div className="flex items-center space-x-6">
+              {/* Social Icons */}
+              <div className="hidden md:flex space-x-6">
+                <a 
+                  href="https://www.tiktok.com/@summerrvu" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-primary hover:text-secondary transition-colors duration-200"
+                >
+                  <FaTiktok size={24} />
+                </a>
+                <a 
+                  href="https://www.instagram.com/summer.vu/?hl=en" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-primary hover:text-secondary transition-colors duration-200"
+                >
+                  <FaInstagram size={24} />
+                </a>
+              </div>
+              
+              {/* Hamburger Menu Button */}
+              <button 
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="text-primary hover:text-secondary p-2 transition-colors duration-200"
+                aria-label="Toggle menu"
+              >
+                {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Mobile Navigation Menu */}
-      <div 
-        className={`
-          fixed left-0 right-0 top-[${isScrolled ? '64px' : '80px'}]
-          bg-white shadow-lg
-          transition-all duration-300 ease-in-out
-          ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}
-          max-h-[80vh] overflow-y-auto
-        `}
-      >
-        <nav className="container mx-auto px-4 py-4">
-          <ul className="space-y-2">
-            {categories.map((category) => (
-              <li key={category.path}>
-                <Link 
-                  href={category.path}
-                  className="block py-2 px-4 text-primary hover:bg-primary hover:text-white rounded-lg transition-colors duration-200"
-                  onClick={() => setIsMenuOpen(false)}
+        {/* Mobile Navigation Menu */}
+        <div 
+          className={`
+            absolute top-full left-0 right-0
+            bg-white shadow-lg
+            transition-all duration-300 ease-in-out
+            ${isMenuOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-4'}
+          `}
+        >
+          <nav className="container mx-auto px-4 py-4">
+            <ul className="space-y-2 max-h-[70vh] overflow-y-auto">
+              {categories.map((category) => (
+                <li key={category.path}>
+                  <Link 
+                    href={category.path}
+                    className="block py-2 px-4 text-primary hover:bg-primary hover:text-white rounded-lg transition-colors duration-200"
+                    onClick={() => setIsMenuOpen(false)}
+                  >
+                    {category.name}
+                  </Link>
+                </li>
+              ))}
+              {/* Mobile Social Links */}
+              <li className="md:hidden flex space-x-4 py-2 px-4">
+                <a 
+                  href="https://www.tiktok.com/@summerrvu" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-primary hover:text-secondary transition-colors duration-200"
                 >
-                  {category.name}
-                </Link>
+                  <FaTiktok size={24} />
+                </a>
+                <a 
+                  href="https://www.instagram.com/summer.vu/?hl=en" 
+                  target="_blank" 
+                  rel="noopener noreferrer" 
+                  className="text-primary hover:text-secondary transition-colors duration-200"
+                >
+                  <FaInstagram size={24} />
+                </a>
               </li>
-            ))}
-            {/* Mobile Social Links */}
-            <li className="md:hidden flex space-x-4 py-2 px-4">
-              <a 
-                href="https://www.tiktok.com/@summerrvu" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-primary hover:text-secondary transition-colors duration-200"
-              >
-                <FaTiktok size={24} />
-              </a>
-              <a 
-                href="https://www.instagram.com/summer.vu/?hl=en" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="text-primary hover:text-secondary transition-colors duration-200"
-              >
-                <FaInstagram size={24} />
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </header>
+            </ul>
+          </nav>
+        </div>
+      </header>
+      
+      {/* Overlay for menu */}
+      {isMenuOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => setIsMenuOpen(false)}
+        />
+      )}
+    </>
   );
 }

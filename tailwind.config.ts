@@ -10,7 +10,8 @@ const config: Config = {
     extend: {
       colors: {
         primary: '#ADDFFF',
-        secondary: '#FF69B4',
+        // pink: #FF69B4'
+        secondary: '#1E90FF',  // Dodger Blue
       },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
