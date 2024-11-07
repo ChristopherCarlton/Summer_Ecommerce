@@ -56,7 +56,7 @@ function CloudflarePage() {
   });
 
   return (
-    <div className="bg-[#FFC0CB] min-h-screen">
+    <div className="bg-primary min-h-screen">
       <Header />
       
       <section className="relative">
@@ -71,7 +71,7 @@ function CloudflarePage() {
 
       <main className="container mx-auto p-8">
         <div className="mb-4">
-          <label htmlFor="sortOrder" className="text-[#FF69B4] font-semibold">Sort:</label>
+          <label htmlFor="sortOrder" className="text-primary font-semibold">Sort:</label>
           <select
             id="sortOrder"
             value={sortOrder}
@@ -97,7 +97,7 @@ function CloudflarePage() {
                 />
               </a>
               <div className="p-4">
-                <p className="text-[#FF69B4] font-semibold font-roboto text-xl">
+                <p className="text-primary font-semibold font-roboto text-xl">
                   {item.name}
                 </p>
               </div>

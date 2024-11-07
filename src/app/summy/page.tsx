@@ -79,15 +79,15 @@ function UploadEditPage() {
   };
 
   return (
-    <div className="bg-[#FFC0CB] min-h-screen p-8">
-      <header className="bg-white text-[#FF69B4] p-6 shadow-md mb-8">
+    <div className="bg-primary min-h-screen p-8">
+      <header className="bg-white text-primary p-6 shadow-md mb-8">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-4xl font-bold font-pacifico">Upload New Item</h1>
         </div>
       </header>
 
       <div className="container mx-auto mb-8">
-        <h2 className="text-2xl font-bold text-[#FF69B4] mb-4">Add New Item</h2>
+        <h2 className="text-2xl font-bold text-primary mb-4">Add New Item</h2>
         <div className="bg-white p-6 rounded-lg shadow-lg">
           <input type="file" id="imageInput" onChange={handleImageChange} className="mb-4 w-full text-black" />
           <input
@@ -109,16 +109,24 @@ function UploadEditPage() {
             onChange={handleCategoryChange}
             className="mb-4 w-full p-2 border border-gray-300 rounded text-black"
           >
-            <option value="null">No Category</option>  {/* Option for null category */}
+            <option value="null">No Category</option>
             <option value="handbag">Handbag</option>
             <option value="wallet">Wallet</option>
+            <option value="makeupBag">Makeup Bag</option>
+            <option value="totes">Totes</option>
             <option value="glasses">Glasses</option>
             <option value="duffle">Duffle</option>
             <option value="mens">Mens</option>
+            <option value="shoes">Shoes</option>
+            <option value="clothes">Clothes</option>
+            <option value="jewelry">Jewelry</option>
+            <option value="watches">Watches</option>
+            <option value="belts">Belts</option>
+            <option value="lifestyle">Lifestyle & Home</option>
           </select>
           <button
             onClick={handleSubmit}
-            className="bg-[#FF69B4] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#FFC0CB] transition duration-300 w-full"
+            className="bg-primary text-white px-6 py-3 rounded-full font-semibold hover:bg-primary transition duration-300 w-full"
           >
             Add Item
           </button>

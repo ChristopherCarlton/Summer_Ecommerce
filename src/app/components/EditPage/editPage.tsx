@@ -128,8 +128,8 @@ function EditPage() {
   };
 
   return (
-    <div className="bg-[#FFC0CB] min-h-screen p-8">
-      <header className="bg-white text-[#FF69B4] p-6 shadow-md mb-8">
+    <div className="bg-primary min-h-screen p-8">
+      <header className="bg-white text-primary p-6 shadow-md mb-8">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-4xl font-bold font-pacifico">Edit Items</h1>
         </div>
@@ -162,9 +162,17 @@ function EditPage() {
                   <option value="null">No Category</option>
                   <option value="handbag">Handbag</option>
                   <option value="wallet">Wallet</option>
+                  <option value="makeupBag">Makeup Bag</option>
+                  <option value="totes">Totes</option>
                   <option value="glasses">Glasses</option>
                   <option value="duffle">Duffle</option>
                   <option value="mens">Mens</option>
+                  <option value="shoes">Shoes</option>
+                  <option value="clothes">Clothes</option>
+                  <option value="jewelry">Jewelry</option>
+                  <option value="watches">Watches</option>
+                  <option value="belts">Belts</option>
+                  <option value="lifestyle">Lifestyle & Home</option>
                 </select>
                 <input
                   type="file"
@@ -173,7 +181,7 @@ function EditPage() {
                 />
                 <button
                   onClick={() => handleEditSubmit(item.id)}
-                  className="bg-[#FF69B4] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#FFC0CB] transition duration-300 w-full mb-2"
+                  className="bg-primary text-white px-6 py-3 rounded-full font-semibold hover:bg-primary transition duration-300 w-full mb-2"
                 >
                   Save
                 </button>
@@ -187,7 +195,7 @@ function EditPage() {
             ) : (
               <div className="p-4 flex justify-between items-center">
                 <div>
-                  <p className="text-[#FF69B4] font-semibold font-roboto text-xl">{item.name}</p>
+                  <p className="text-primary font-semibold font-roboto text-xl">{item.name}</p>
                   <p className="text-gray-500">{item.category || "No Category"}</p>
                   <img
                     src={getImageUrl(item.id)}
@@ -195,7 +203,7 @@ function EditPage() {
                     className="w-full h-64 object-cover mb-4"
                   />
                   <a href={item.link}>
-                    <button className="bg-[#FF69B4] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#FFC0CB] transition duration-300 w-full mb-2">
+                    <button className="bg-primary text-white px-6 py-3 rounded-full font-semibold hover:bg-primary transition duration-300 w-full mb-2">
                       View Item
                     </button>
                   </a>
@@ -203,7 +211,7 @@ function EditPage() {
                 <div className="flex flex-col">
                   <button
                     onClick={() => handleEdit(item)}
-                    className="bg-[#FF69B4] text-white px-6 py-3 rounded-full font-semibold hover:bg-[#FFC0CB] transition duration-300 mb-2"
+                    className="bg-primary text-white px-6 py-3 rounded-full font-semibold hover:bg-primary transition duration-300 mb-2"
                   >
                     Edit
                   </button>
