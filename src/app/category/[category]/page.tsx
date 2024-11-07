@@ -64,7 +64,7 @@ export default function CategoryPage({
       
       <main className="container mx-auto p-8">
         <h1 className="text-4xl font-bold text-white mb-8">
-          {/* {categoryNameMapping[params.category] || params.category} */}
+          {categoryNameMapping[params.category] || params.category}
         </h1>
         
         {loading ? (
