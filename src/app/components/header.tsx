@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FaTiktok, FaInstagram, FaBars, FaTimes } from 'react-icons/fa';
 import { Pacifico } from "@next/font/google";
 import Link from 'next/link';
@@ -23,13 +23,32 @@ const categories = [
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 0) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   return (
-    <header className="bg-white text-primary shadow-md">
+    <header className={`
+      sticky top-0 z-50
+      bg-white text-primary shadow-md
+      transition-all duration-300
+      ${isScrolled ? 'py-2' : 'py-4'}
+    `}>
       {/* Main header content */}
-      <div className="container mx-auto px-4 py-6">
+      <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
-          <Link href="/" className={`text-4xl font-bold ${pacifico.className}`}>
+          <Link href="/" className={`text-4xl font-bold ${pacifico.className} transition-all duration-300 ${isScrolled ? 'scale-90' : ''}`}>
             Summer Shop
           </Link>
           
@@ -40,7 +59,7 @@ export default function Header() {
                 href="https://www.tiktok.com/@summerrvu" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="text-primary hover:text-[#ADD8E6]"
+                className="text-primary hover:text-secondary transition-colors duration-200"
               >
                 <FaTiktok size={24} />
               </a>
@@ -48,7 +67,7 @@ export default function Header() {
                 href="https://www.instagram.com/summer.vu/?hl=en" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="text-primary hover:text-[#ADD8E6]"
+                className="text-primary hover:text-secondary transition-colors duration-200"
               >
                 <FaInstagram size={24} />
               </a>
@@ -57,7 +76,7 @@ export default function Header() {
             {/* Hamburger Menu Button */}
             <button 
               onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="text-primary hover:text-[#ADD8E6] p-2"
+              className="text-primary hover:text-secondary p-2 transition-colors duration-200"
               aria-label="Toggle menu"
             >
               {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
@@ -69,9 +88,9 @@ export default function Header() {
       {/* Mobile Navigation Menu */}
       <div 
         className={`
-          fixed left-0 right-0 
+          fixed left-0 right-0 top-[${isScrolled ? '64px' : '80px'}]
           bg-white shadow-lg
-          transition-all duration-300 ease-in-out z-50
+          transition-all duration-300 ease-in-out
           ${isMenuOpen ? 'opacity-100 visible' : 'opacity-0 invisible'}
           max-h-[80vh] overflow-y-auto
         `}
@@ -95,7 +114,7 @@ export default function Header() {
                 href="https://www.tiktok.com/@summerrvu" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="text-primary hover:text-[#ADD8E6]"
+                className="text-primary hover:text-secondary transition-colors duration-200"
               >
                 <FaTiktok size={24} />
               </a>
@@ -103,7 +122,7 @@ export default function Header() {
                 href="https://www.instagram.com/summer.vu/?hl=en" 
                 target="_blank" 
                 rel="noopener noreferrer" 
-                className="text-primary hover:text-[#ADD8E6]"
+                className="text-primary hover:text-secondary transition-colors duration-200"
               >
                 <FaInstagram size={24} />
               </a>
