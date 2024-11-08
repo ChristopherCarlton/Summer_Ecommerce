@@ -42,7 +42,7 @@ export default function Header() {
     <>
       <header className={`
         sticky top-0 z-50
-        bg-white text-primary
+        bg-white text-secondary
         transition-all duration-300
         ${isScrolled ? 'py-2 shadow-md' : 'py-4'}
       `}>
@@ -59,7 +59,7 @@ export default function Header() {
                   href="https://www.tiktok.com/@summerrvu" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="text-primary hover:text-secondary transition-colors duration-200"
+                  className="text-secondary hover:text-primary transition-colors duration-200"
                 >
                   <FaTiktok size={24} />
                 </a>
@@ -67,7 +67,7 @@ export default function Header() {
                   href="https://www.instagram.com/summer.vu/?hl=en" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="text-primary hover:text-secondary transition-colors duration-200"
+                  className="text-secondary hover:text-primary transition-colors duration-200"
                 >
                   <FaInstagram size={24} />
                 </a>
@@ -76,7 +76,7 @@ export default function Header() {
               {/* Hamburger Menu Button */}
               <button 
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="text-primary hover:text-secondary p-2 transition-colors duration-200"
+                className="text-secondary hover:text-primary p-2 transition-colors duration-200"
                 aria-label="Toggle menu"
               >
                 {isMenuOpen ? <FaTimes size={24} /> : <FaBars size={24} />}
@@ -100,7 +100,7 @@ export default function Header() {
                 <li key={category.path}>
                   <Link 
                     href={category.path}
-                    className="block py-2 px-4 text-primary hover:bg-primary hover:text-white rounded-lg transition-colors duration-200"
+                    className="block py-2 px-4 text-secondary hover:bg-primary hover:text-white rounded-lg transition-colors duration-200"
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {category.name}
@@ -113,7 +113,7 @@ export default function Header() {
                   href="https://www.tiktok.com/@summerrvu" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="text-primary hover:text-secondary transition-colors duration-200"
+                  className="text-secondary hover:text-primary transition-colors duration-200"
                 >
                   <FaTiktok size={24} />
                 </a>
@@ -121,7 +121,7 @@ export default function Header() {
                   href="https://www.instagram.com/summer.vu/?hl=en" 
                   target="_blank" 
                   rel="noopener noreferrer" 
-                  className="text-primary hover:text-secondary transition-colors duration-200"
+                  className="text-secondary hover:text-primary transition-colors duration-200"
                 >
                   <FaInstagram size={24} />
                 </a>

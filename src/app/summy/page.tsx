@@ -80,7 +80,7 @@ function UploadEditPage() {
 
   return (
     <div className="bg-primary min-h-screen p-8">
-      <header className="bg-white text-primary p-6 shadow-md mb-8">
+      <header className="bg-white text-secondary p-6 shadow-md mb-8">
         <div className="container mx-auto flex justify-between items-center">
           <h1 className="text-4xl font-bold font-pacifico">Upload New Item</h1>
         </div>
@@ -126,7 +126,7 @@ function UploadEditPage() {
           </select>
           <button
             onClick={handleSubmit}
-            className="bg-primary text-white px-6 py-3 rounded-full font-semibold hover:bg-primary transition duration-300 w-full"
+            className="bg-secondary text-white px-6 py-3 rounded-full font-semibold hover:bg-primary transition duration-300 w-full"
           >
             Add Item
           </button>

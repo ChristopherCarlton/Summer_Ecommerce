@@ -70,7 +70,7 @@ function Home() {
 
       <main className="container mx-auto p-8">
         <div className="mb-4">
-          <label htmlFor="sortOrder" className="text-primary font-semibold">Sort:</label>
+          <label htmlFor="sortOrder" className="text-black font-semibold">Sort:</label>
           <select
             id="sortOrder"
             value={sortOrder}
@@ -96,7 +96,7 @@ function Home() {
                 />
               </a>
               <div className="p-4">
-                <p className="text-primary font-semibold font-roboto text-xl">
+                <p className="text-secondary font-semibold font-roboto text-xl">
                   {item.name}
                 </p>
               </div>

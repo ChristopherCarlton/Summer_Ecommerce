@@ -90,7 +90,7 @@ export default function CategoryPage({
                   />
                 </a>
                 <div className="p-4">
-                  <p className="text-primary font-semibold font-roboto text-xl">
+                  <p className="text-secondary font-semibold font-roboto text-xl">
                     {item.name}
                   </p>
                 </div>
