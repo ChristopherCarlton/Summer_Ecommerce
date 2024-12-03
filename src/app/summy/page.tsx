@@ -7,7 +7,8 @@ function UploadEditPage() {
   const [newImage, setNewImage] = useState<File | null>(null);
   const [newDescription, setNewDescription] = useState("");
   const [newLink, setNewLink] = useState("");
-  const [newCategory, setNewCategory] = useState<string | null>(null);  // Allow null for category
+  const [newCategory, setNewCategory] = useState<string | null>(null);
+  const [newBestseller, setNewBestseller] = useState(false);
   const [message, setMessage] = useState<{ text: string; color: string } | null>(null);
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,6 +27,10 @@ function UploadEditPage() {
 
   const handleCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setNewCategory(e.target.value === "null" ? null : e.target.value);
+  };
+
+  const handleBestsellerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewBestseller(e.target.checked);
   };
 
   const handleSubmit = async () => {
@@ -53,7 +58,8 @@ function UploadEditPage() {
           id: id,
           name: newDescription,
           link: newLink || imageUrl,
-          category: newCategory,  // Category can be null
+          category: newCategory,
+          is_bestseller: newBestseller
         };
 
         const { data: insertData, error } = await supabase
@@ -67,7 +73,8 @@ function UploadEditPage() {
           setNewImage(null);
           setNewDescription("");
           setNewLink("");
-          setNewCategory(null);  // Reset category field
+          setNewCategory(null);
+          setNewBestseller(false);
           (document.getElementById("imageInput") as HTMLInputElement).value = "";
         }
       } catch (error) {
@@ -89,7 +96,12 @@ function UploadEditPage() {
       <div className="container mx-auto mb-8">
         <h2 className="text-2xl font-bold text-primary mb-4">Add New Item</h2>
         <div className="bg-white p-6 rounded-lg shadow-lg">
-          <input type="file" id="imageInput" onChange={handleImageChange} className="mb-4 w-full text-black" />
+          <input 
+            type="file" 
+            id="imageInput" 
+            onChange={handleImageChange} 
+            className="mb-4 w-full text-black" 
+          />
           <input
             type="text"
             value={newDescription}
@@ -124,6 +136,16 @@ function UploadEditPage() {
             <option value="belts">Belts</option>
             <option value="lifestyle">Lifestyle & Home</option>
           </select>
+          <div className="mb-4 flex items-center">
+            <input
+              type="checkbox"
+              id="newBestseller"
+              checked={newBestseller}
+              onChange={handleBestsellerChange}
+              className="mr-2 h-4 w-4 text-primary border-gray-300 rounded"
+            />
+            <label htmlFor="newBestseller" className="text-black">Best Seller</label>
+          </div>
           <button
             onClick={handleSubmit}
             className="bg-primary text-white px-6 py-3 rounded-full font-semibold hover:bg-primary transition duration-300 w-full"

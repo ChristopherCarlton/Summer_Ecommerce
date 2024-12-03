@@ -7,6 +7,7 @@ type Item = {
   name: string;
   link: string;
   category: string | null;
+  is_bestseller: boolean;
 };
 
 function EditPage() {
@@ -16,12 +17,13 @@ function EditPage() {
   const [editedName, setEditedName] = useState("");
   const [editedLink, setEditedLink] = useState("");
   const [editedCategory, setEditedCategory] = useState<string | null>(null);
+  const [editedBestseller, setEditedBestseller] = useState<boolean>(false);
   const [message, setMessage] = useState<{ text: string; color: string } | null>(null);
   const [deleteId, setDeleteId] = useState<number | null>(null);
 
   useEffect(() => {
     const fetchItems = async () => {
-      const { data, error } = await supabase.from('summerItems').select('id, name, link, category');
+      const { data, error } = await supabase.from('summerItems').select('id, name, link, category, is_bestseller');
       if (error) {
         console.error('Error fetching items:', error);
       } else {
@@ -37,6 +39,7 @@ function EditPage() {
     setEditedName(item.name);
     setEditedLink(item.link);
     setEditedCategory(item.category);
+    setEditedBestseller(item.is_bestseller || false);
     setEditedImage(null);
   };
 
@@ -45,6 +48,7 @@ function EditPage() {
     setEditedName("");
     setEditedLink("");
     setEditedCategory(null);
+    setEditedBestseller(false);
     setEditedImage(null);
   };
 
@@ -76,13 +80,28 @@ function EditPage() {
 
     const { data, error } = await supabase
       .from('summerItems')
-      .update({ name: editedName, link: imageUrl, category: editedCategory })
+      .update({ 
+        name: editedName, 
+        link: imageUrl, 
+        category: editedCategory,
+        is_bestseller: editedBestseller 
+      })
       .eq('id', id);
 
     if (error) {
       setMessage({ text: 'Failed to update item', color: 'red' });
     } else {
-      setItems(items.map((item) => (item.id === id ? { ...item, name: editedName, link: imageUrl, category: editedCategory } : item)));
+      setItems(items.map((item) => (
+        item.id === id 
+          ? { 
+              ...item, 
+              name: editedName, 
+              link: imageUrl, 
+              category: editedCategory,
+              is_bestseller: editedBestseller 
+            } 
+          : item
+      )));
       setMessage({ text: 'Item updated successfully', color: 'green' });
       handleCancelEdit();
     }
@@ -173,6 +192,16 @@ function EditPage() {
                     <option value="belts">Belts</option>
                     <option value="lifestyle">Lifestyle & Home</option>
                   </select>
+                  <div className="mb-4 flex items-center">
+                    <input
+                      type="checkbox"
+                      id="bestseller"
+                      checked={editedBestseller}
+                      onChange={(e) => setEditedBestseller(e.target.checked)}
+                      className="mr-2 h-4 w-4 text-primary border-gray-300 rounded"
+                    />
+                    <label htmlFor="bestseller" className="text-black">Best Seller</label>
+                  </div>
                   <input
                     type="file"
                     onChange={(e) => setEditedImage(e.target.files ? e.target.files[0] : null)}
@@ -194,7 +223,14 @@ function EditPage() {
               ) : (
                 <div className="p-4 flex flex-col">
                   <div>
-                    <p className="text-primary font-semibold font-roboto text-xl">{item.name}</p>
+                    <div className="flex justify-between items-start mb-2">
+                      <p className="text-primary font-semibold font-roboto text-xl">{item.name}</p>
+                      {item.is_bestseller && (
+                        <span className="bg-yellow-400 text-black text-xs px-2 py-1 rounded-full ml-2">
+                          Best Seller
+                        </span>
+                      )}
+                    </div>
                     <p className="text-gray-500">{item.category || "No Category"}</p>
                     <img
                       src={getImageUrl(item.id)}
