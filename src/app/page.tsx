@@ -4,11 +4,12 @@ import { supabase } from "../lib/supabaseClient";
 import Header from "./components/header";
 import Footer from "./components/footer";
 
-// Define the type for the items
 type Item = {
   id: number;
   name: string;
   link: string;
+  category: string;
+  is_bestseller: boolean;
 };
 
 function Home() {
@@ -21,7 +22,7 @@ function Home() {
       console.log("Fetching items from Supabase...");
       const { data, error } = await supabase
         .from("summerItems")
-        .select("id, name, link, category");
+        .select("id, name, link, category, is_bestseller");
 
       console.log("Supabase response:", data, error);
 
@@ -89,11 +90,18 @@ function Home() {
               className="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105"
             >
               <a href={item.link}>
-                <img
-                  src={getImageUrl(item.id)}
-                  alt={`Summer item: ${item.name} - perfect for beach days`}
-                  className="w-full h-64 object-cover"
-                />
+                <div className="relative">
+                  <img
+                    src={getImageUrl(item.id)}
+                    alt={`Summer item: ${item.name} - perfect for beach days`}
+                    className="w-full h-64 object-cover"
+                  />
+                  {item.is_bestseller && (
+                    <span className="absolute top-2 right-2 bg-yellow-400 text-black text-xs px-2 py-1 rounded-full">
+                      Best Seller
+                    </span>
+                  )}
+                </div>
               </a>
               <div className="p-4">
                 <p className="text-secondary font-semibold font-roboto text-xl">

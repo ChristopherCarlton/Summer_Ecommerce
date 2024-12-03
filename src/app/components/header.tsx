@@ -7,6 +7,7 @@ const pacifico = Pacifico({ weight: "400", subsets: ["latin"] });
 
 const categories = [
   { name: "All Items", path: "/" },
+  { name: "Best Sellers", path: "/category/best-sellers" },
   { name: "Handbags", path: "/category/handbag" },
   { name: "Wallets", path: "/category/wallet" },
   { name: "Glasses", path: "/category/glasses" },
@@ -100,7 +101,9 @@ export default function Header() {
                 <li key={category.path}>
                   <Link 
                     href={category.path}
-                    className="block py-2 px-4 text-secondary hover:bg-primary hover:text-white rounded-lg transition-colors duration-200"
+                    className={`block py-2 px-4 text-secondary hover:bg-primary hover:text-white rounded-lg transition-colors duration-200 ${
+                      category.name === "Best Sellers" ? "font-semibold text-primary hover:text-white" : ""
+                    }`}
                     onClick={() => setIsMenuOpen(false)}
                   >
                     {category.name}
