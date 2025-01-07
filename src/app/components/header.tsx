@@ -1,5 +1,6 @@
+"use client";
 import React, { useState, useEffect } from 'react';
-import { FaTiktok, FaInstagram, FaBars, FaTimes } from 'react-icons/fa';
+import { FaTiktok, FaInstagram, FaBars, FaTimes, FaArrowLeft } from 'react-icons/fa';
 import { Pacifico } from "@next/font/google";
 import Link from 'next/link';
 
@@ -8,6 +9,7 @@ const pacifico = Pacifico({ weight: "400", subsets: ["latin"] });
 const categories = [
   { name: "New Arrivals", path: "/" },
   { name: "Best Sellers", path: "/category/best-sellers" },
+  { name: "Brands", path: "/brands", isBrandsMenu: true },
   { name: "Handbags", path: "/category/handbag" },
   { name: "Wallets", path: "/category/wallet" },
   { name: "Glasses", path: "/category/glasses" },
@@ -22,9 +24,30 @@ const categories = [
   { name: "Lifestyle & Home", path: "/category/lifestyle" },
 ];
 
+const brands = [
+  { name: "CHANEL", keyword: "Chanel" },
+  { name: "PRADA", keyword: "Prada" },
+  { name: "GUCCI", keyword: "Gucci" },
+  { name: "LOUIS VUITTON", keyword: "LV" },
+  { name: "MIU MIU", keyword: "Miu" },
+  { name: "BOTTEGA", keyword: "Bottega" },
+  { name: "DIOR", keyword: "Dior" },
+  { name: "FENDI", keyword: "Fendi" },
+  { name: "HERMES", keyword: "Hermes" },
+  { name: "RALPH LAUREN", keyword: "Ralph" },
+  { name: "CELINE", keyword: "Celine" },
+  { name: "JACQUEMUS", keyword: "Jacquemus" },
+  { name: "CHROMEHEARTS", keyword: "Chrome" },
+  { name: "VIVIENNE WESTWOOD", keyword: "Vivienne" },
+  { name: "TORY BURCH", keyword: "Tory" },
+  { name: "BALENCIAGA", keyword: "Balenciaga" },
+  { name: "GOYARD", keyword: "Goyard" }
+];
+
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [showBrands, setShowBrands] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -96,40 +119,76 @@ export default function Header() {
           `}
         >
           <nav className="container mx-auto px-4 py-4">
-            <ul className="space-y-2 max-h-[70vh] overflow-y-auto">
-              {categories.map((category) => (
-                <li key={category.path}>
-                  <Link 
-                    href={category.path}
-                    className={`block py-2 px-4 text-secondary hover:bg-primary hover:text-white rounded-lg transition-colors duration-200 ${
-                      category.name === "Best Sellers" ? "font-semibold text-primary hover:text-white" : ""
-                    }`}
-                    onClick={() => setIsMenuOpen(false)}
+            {showBrands ? (
+              <div>
+                <button 
+                  onClick={() => setShowBrands(false)}
+                  className="flex items-center text-secondary mb-4"
+                >
+                  <FaArrowLeft className="mr-2" /> Back
+                </button>
+                <ul className="space-y-2 max-h-[70vh] overflow-y-auto">
+                  {brands.map((brand) => (
+                    <li key={brand.name}>
+                      <Link 
+                        href={`/brands/${brand.keyword.toLowerCase()}`}
+                        className="block py-2 px-4 text-secondary hover:bg-primary hover:text-white rounded-lg transition-colors duration-200"
+                        onClick={() => {
+                          setIsMenuOpen(false);
+                          setShowBrands(false);
+                        }}
+                      >
+                        {brand.name}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ) : (
+              <ul className="space-y-2 max-h-[70vh] overflow-y-auto">
+                {categories.map((category) => (
+                  <li key={category.path}>
+                    {category.isBrandsMenu ? (
+                      <button 
+                        className="w-full text-left py-2 px-4 text-secondary hover:bg-primary hover:text-white rounded-lg transition-colors duration-200"
+                        onClick={() => setShowBrands(true)}
+                      >
+                        {category.name}
+                      </button>
+                    ) : (
+                      <Link 
+                        href={category.path}
+                        className={`block py-2 px-4 text-secondary hover:bg-primary hover:text-white rounded-lg transition-colors duration-200 ${
+                          category.name === "Best Sellers" ? "font-semibold text-primary hover:text-white" : ""
+                        }`}
+                        onClick={() => setIsMenuOpen(false)}
+                      >
+                        {category.name}
+                      </Link>
+                    )}
+                  </li>
+                ))}
+                {/* Mobile Social Links */}
+                <li className="md:hidden flex space-x-4 py-2 px-4">
+                  <a 
+                    href="https://www.tiktok.com/@summerrvu" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-secondary hover:text-primary transition-colors duration-200"
                   >
-                    {category.name}
-                  </Link>
+                    <FaTiktok size={24} />
+                  </a>
+                  <a 
+                    href="https://www.instagram.com/summer.vu/?hl=en" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-secondary hover:text-primary transition-colors duration-200"
+                  >
+                    <FaInstagram size={24} />
+                  </a>
                 </li>
-              ))}
-              {/* Mobile Social Links */}
-              <li className="md:hidden flex space-x-4 py-2 px-4">
-                <a 
-                  href="https://www.tiktok.com/@summerrvu" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="text-secondary hover:text-primary transition-colors duration-200"
-                >
-                  <FaTiktok size={24} />
-                </a>
-                <a 
-                  href="https://www.instagram.com/summer.vu/?hl=en" 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
-                  className="text-secondary hover:text-primary transition-colors duration-200"
-                >
-                  <FaInstagram size={24} />
-                </a>
-              </li>
-            </ul>
+              </ul>
+            )}
           </nav>
         </div>
       </header>
@@ -138,7 +197,10 @@ export default function Header() {
       {isMenuOpen && (
         <div 
           className="fixed inset-0 bg-black bg-opacity-50 z-40"
-          onClick={() => setIsMenuOpen(false)}
+          onClick={() => {
+            setIsMenuOpen(false);
+            setShowBrands(false);
+          }}
         />
       )}
     </>
