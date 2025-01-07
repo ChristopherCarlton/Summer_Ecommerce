@@ -14,8 +14,6 @@ type Item = {
 
 function Home() {
   const [items, setItems] = useState<Item[]>([]);
-  const [sortOrder, setSortOrder] = useState<string>("newest");
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -26,12 +24,9 @@ function Home() {
         .order('id', { ascending: false })
         .limit(32);
 
-      console.log("Supabase response:", data, error);
-
       if (error) {
         console.error("Error fetching items:", error);
       } else {
-        console.log("Fetched items:", data);
         setItems(data as Item[]);
       }
     };
@@ -39,23 +34,9 @@ function Home() {
     fetchItems();
   }, []);
 
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
   const getImageUrl = (id: number) => {
-    const url = `https://summersshop.com/summer-item-${id}.png`;
-    console.log(`Image URL for item ${id}:`, url);
-    return url;
+    return `https://summersshop.com/summer-item-${id}.png`;
   };
-
-  const sortedItems = [...items].sort((a, b) => {
-    if (sortOrder === "newest") {
-      return b.id - a.id;
-    } else {
-      return a.id - b.id;
-    }
-  });
 
   return (
     <div className="bg-primary min-h-screen">
@@ -72,21 +53,9 @@ function Home() {
       </section>
 
       <main className="container mx-auto p-8">
-        <div className="mb-4">
-          <label htmlFor="sortOrder" className="text-black font-semibold">Sort:</label>
-          <select
-            id="sortOrder"
-            value={sortOrder}
-            onChange={(e) => setSortOrder(e.target.value)}
-            className="ml-2 p-2 border border-gray-300 rounded text-black"
-          >
-            <option value="newest">Newest</option>
-            <option value="oldest">Oldest</option>
-          </select>
-        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-          {sortedItems.length === 0 && <p>No items found.</p>}
-          {sortedItems.map((item) => (
+          {items.length === 0 && <p>No items found.</p>}
+          {items.map((item) => (
             <div
               key={item.id}
               className="bg-white rounded-lg shadow-lg overflow-hidden transform transition duration-300 hover:scale-105"
