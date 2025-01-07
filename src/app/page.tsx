@@ -22,7 +22,9 @@ function Home() {
       console.log("Fetching items from Supabase...");
       const { data, error } = await supabase
         .from("summerItems")
-        .select("id, name, link, category, is_bestseller");
+        .select("*")
+        .order('id', { ascending: false })
+        .limit(32);
 
       console.log("Supabase response:", data, error);
 

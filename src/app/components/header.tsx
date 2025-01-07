@@ -6,7 +6,7 @@ import Link from 'next/link';
 const pacifico = Pacifico({ weight: "400", subsets: ["latin"] });
 
 const categories = [
-  { name: "All Items", path: "/" },
+  { name: "New Arrivals", path: "/" },
   { name: "Best Sellers", path: "/category/best-sellers" },
   { name: "Handbags", path: "/category/handbag" },
   { name: "Wallets", path: "/category/wallet" },
