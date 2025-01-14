@@ -24,20 +24,35 @@ export default function CategoryPage({
   useEffect(() => {
     const fetchItems = async () => {
       setLoading(true);
-      const { data, error } = await supabase
-        .from("summerItems")
-        .select("id, name, link, category, is_bestseller")
-        .eq(
-          params.category === "best-sellers" ? "is_bestseller" : "category",
-          params.category === "best-sellers" ? true : params.category
-        );
+      try {
+        if (params.category === "new-arrivals") {
+          // For new arrivals, just get the latest 32 items across all categories
+          const { data, error } = await supabase
+            .from("summerItems")
+            .select("id, name, link, category, is_bestseller")
+            .order('id', { ascending: false })
+            .limit(32);
 
-      if (error) {
+          if (error) throw error;
+          setItems(data || []);
+        } else {
+          // For other categories, keep existing logic
+          const { data, error } = await supabase
+            .from("summerItems")
+            .select("id, name, link, category, is_bestseller")
+            .eq(
+              params.category === "best-sellers" ? "is_bestseller" : "category",
+              params.category === "best-sellers" ? true : params.category
+            );
+
+          if (error) throw error;
+          setItems(data || []);
+        }
+      } catch (error) {
         console.error("Error fetching items:", error);
-      } else {
-        setItems(data as Item[]);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
     fetchItems();
@@ -48,6 +63,7 @@ export default function CategoryPage({
   };
 
   const categoryNameMapping: { [key: string]: string } = {
+    "new-arrivals": "New Arrivals",
     "best-sellers": "Best Sellers",
     handbag: "Handbags",
     wallet: "Wallets",

@@ -1,13 +1,14 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { FaTiktok, FaInstagram, FaBars, FaTimes, FaArrowLeft } from 'react-icons/fa';
+import { FaTiktok, FaInstagram, FaBars, FaTimes, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import { Pacifico } from "@next/font/google";
 import Link from 'next/link';
 
 const pacifico = Pacifico({ weight: "400", subsets: ["latin"] });
 
 const categories = [
-  { name: "New Arrivals", path: "/" },
+  { name: "All Items", path: "/" },
+  { name: "New Arrivals", path: "/category/new-arrivals" },
   { name: "Best Sellers", path: "/category/best-sellers" },
   { name: "Brands", path: "/brands", isBrandsMenu: true },
   { name: "Handbags", path: "/category/handbag" },
@@ -150,10 +151,11 @@ export default function Header() {
                   <li key={category.path}>
                     {category.isBrandsMenu ? (
                       <button 
-                        className="w-full text-left py-2 px-4 text-secondary hover:bg-primary hover:text-white rounded-lg transition-colors duration-200"
+                        className="w-full text-left py-2 px-4 text-secondary hover:bg-primary hover:text-white rounded-lg transition-colors duration-200 flex justify-between items-center"
                         onClick={() => setShowBrands(true)}
                       >
-                        {category.name}
+                        <span>{category.name}</span>
+                        <FaArrowRight className="ml-2" />
                       </button>
                     ) : (
                       <Link 
