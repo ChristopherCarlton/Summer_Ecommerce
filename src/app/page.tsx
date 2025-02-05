@@ -11,7 +11,7 @@ type Item = {
   category: string;
   is_bestseller: boolean;
 };
-
+ 
 function Home() {
   const [items, setItems] = useState<Item[]>([]);
   const [loading, setLoading] = useState(true);
